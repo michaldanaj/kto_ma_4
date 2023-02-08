@@ -33,3 +33,8 @@ kontynuować wyliczenia od tego miejsca.
 
 Takie podejście pozwoliłoby pogłębiać analizy, np. gdy wystarczająco dużo
 czasu pozostało do wykonania analiz.
+
+
+## Do analiz
+Nie zobaczył że może wygrać!
+08-Feb-23 22:13:30 - INFO - [3, 3, 4, 2, 4, 4, 3, 3, 5, 6, 4, 2, 5, 3, 2, 2, 0, 0]
