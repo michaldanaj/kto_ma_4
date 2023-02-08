@@ -302,7 +302,7 @@ class Silnik:
 
         self.pl = plan
 
-        oceny: list[float|None] = [None]*self.pl.n_col
+        oceny: list[float] = [0]*self.pl.n_col
 
         if kolor == Pole.zolty:
             czy_maks_gracz = True
@@ -335,9 +335,9 @@ class Silnik:
     # wykonuje każdy możliwy ruch danym kolorem,
     # oceniając go do zadanej głębokości i zwraca listę
     # z oceną każdego z nich
-    def ocen_ruchy_obc(self, kolor: Pole) -> list[float|None]:
+    def ocen_ruchy_obc(self, kolor: Pole) -> list[float]:
 
-        oceny: list[float|None] = [None]*self.pl.n_col
+        oceny: list[float] = [0]*self.pl.n_col
         self.oceny.clear()
 
         if kolor == Pole.zolty:
@@ -382,7 +382,7 @@ class Silnik:
     def najlepszy_ruch(self, pozycja: Plansza, kolor: Pole) -> int:
         self.pl = deepcopy(pozycja)
 
-        ruchy: list[float|None] = self.ocen_ruchy_obc(kolor)
+        ruchy: list[float] = self.ocen_ruchy_obc(kolor)
         # Wybieram najlpeszy ruch
         najlepsza_ocena: float = max(ruchy)# type: ignore
         najlepszy_ruch = ruchy.index(najlepsza_ocena)

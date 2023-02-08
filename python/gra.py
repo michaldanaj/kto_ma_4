@@ -5,7 +5,7 @@ from plansza import rev
 import logging as log
 
 pl = Plansza()
-ruchy:list[int] = []
+ruchy: list[int] = []
 
 class Czlowiek:
 
@@ -30,7 +30,7 @@ def zamien_ruch(czyj_ruch: str):
 log.basicConfig(filename='log_gra.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
     level=log.DEBUG, datefmt='%d-%b-%y %H:%M:%S')
 log.info("NOWA GRA")
-gracze = [ Komp(), Czlowiek()]
+gracze = [ Czlowiek(), Komp()]   
 czyj_ruch_idx = 0
 kolor = Pole.czerwony
 while True:
