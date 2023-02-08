@@ -1,7 +1,7 @@
 import unittest
 from plansza import Plansza
 from plansza import Pole
-from silnik import Silnik
+#from silnik import Silnik
 
 class Testp(unittest.TestCase):
 
@@ -57,6 +57,13 @@ class Testp(unittest.TestCase):
         p.plansza[2][3] = Pole.zolty
         #p.print()
         self.assertEqual(p.czy_koniec()[0], True)
+
+    def test_hash(self):
+
+        p = Plansza()
+        p.wypelnij()
+        hash = p.hash_string()
+        print(hash)
 
 if __name__ == '__main__':
     unittest.main()

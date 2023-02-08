@@ -22,8 +22,8 @@ class Plansza:
 
     def __init__(self):
 
-        self.plansza = [[Pole.puste for col in range(self.n_col)] for row in range(self.n_row)]
-            
+        self.plansza = [[Pole.puste for _ in range(self.n_col)] for _ in range(self.n_row)]
+
         #zbiór współrzędnych pól do specjalnego oznaczenia
         #stosowane między innymi do oznaczenia wygranej
         self.oznaczone = []
@@ -39,7 +39,7 @@ class Plansza:
     def wypelnij(self):
         kol_do_wypel = ((Pole.zolty, Pole.zolty, Pole.czerwony, Pole.czerwony,
         Pole.zolty, Pole.zolty),
-        (Pole.czerwony, Pole.czerwony, Pole.zolty, Pole.zolty, 
+        (Pole.czerwony, Pole.czerwony, Pole.zolty, Pole.zolty,
         Pole.czerwony, Pole.czerwony)
         )
 
@@ -49,10 +49,10 @@ class Plansza:
                 self.plansza[i][j] = kol_do_wypel[ktory][i]
 
 
-    def czy_koniec(self):
-        
+    def czy_koniec(self) -> tuple[bool, Pole]:
+
         kierunki = ((0,1), (1,0), (1,1), (-1,1))
-        
+
         startowe = (
             #dla kierunku poziomego
             ((i,0) for i in range(self.n_row)),
@@ -63,24 +63,22 @@ class Plansza:
             #dla skosu w prawo i w dół
             ((3,0), (4,0), (5,0), (5,1), (5,2), (5,3))
         )
-        
-        for  kierunek in range(len(startowe)):
-            i_delta = kierunki[kierunek][0]
-            j_delta = kierunki[kierunek][1]
-            
-            for punkt_startu in startowe[kierunek]:
+
+        for  (i_delta, j_delta), startowy in zip(kierunki, startowe):
+
+            for punkt_startu in startowy:
                 ile_zoltych = 0
                 ile_czerwonych = 0
                 i = punkt_startu[0]
                 j = punkt_startu[1]
-                
+
                 while i >= 0 and i < self.n_row and j>=0 and j < self.n_col:
                     if self.plansza[i][j] == Pole.zolty:
                         ile_zoltych = ile_zoltych + 1
                         ile_czerwonych = 0
                         if ile_zoltych == 4:
                             return (True, Pole.zolty)
-                            
+
                     elif self.plansza[i][j] == Pole.czerwony:
                         ile_czerwonych = ile_czerwonych + 1
                         ile_zoltych = 0
@@ -89,12 +87,16 @@ class Plansza:
                     else:
                         ile_zoltych = 0
                         ile_czerwonych = 0
-                        
+                        # jeśli nie zmieszczą się już 4 w rzędzie,
+                        # to wychodzę z pętli
+                        if i + 4*i_delta < 0 or i + 4*i_delta >= self.n_row or \
+                           j + 4*j_delta < 0 or j + 4*j_delta >= self.n_row:
+                           break                           
+
                     i = i + i_delta
                     j = j + j_delta
-                    
-        return (False, None)
 
+        return (False, None)# type: ignore
 
     def print(self):
 
@@ -147,3 +149,17 @@ class Plansza:
             i = i - 1
         self.plansza[i][j] = Pole.puste
 
+    def hash_string(self):
+        wyn = ''
+        for wiersz in self.plansza:
+           wyn += ''.join(str(e.value) for e in wiersz)
+        return wyn
+
+
+    def __repr__(self) -> str:
+        wyn = ''
+        for wiersz in reversed(self.plansza):
+           wyn += '|'.join(str(e.value) for e in wiersz)+'\n'
+        return wyn
+
+       
