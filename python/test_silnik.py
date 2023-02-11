@@ -3,10 +3,9 @@ from plansza import Plansza
 from plansza import Pole
 from silnik import Silnik
 
+
 class Test_silnik(unittest.TestCase):
-
     def test_ocen(self):
-
         plansza = Plansza()
         s = Silnik(3)
 
@@ -19,7 +18,7 @@ class Test_silnik(unittest.TestCase):
         # jeden krazek, ujemny bo czerwony
         plansza.czysc()
         plansza.plansza[0][2] = Pole.czerwony
-        #plansza.print()
+        # plansza.print()
         self.assertEqual(s.ocen(plansza), -s.wagi_ocena[2])
 
         # symetryczne rostawienie po jednym krążku
@@ -28,11 +27,11 @@ class Test_silnik(unittest.TestCase):
         plansza.plansza[0][4] = Pole.czerwony
         self.assertAlmostEqual(s.ocen(plansza), 0.0044)
 
-        #niesymetryczne rostawienie
+        # niesymetryczne rostawienie
         plansza.czysc()
         plansza.plansza[0][3] = Pole.zolty
         plansza.plansza[0][2] = Pole.czerwony
-        #self.assertEqual(s.ocen(plansza), s.wagi_ocena[3]-s.wagi_ocena[2])
+        # self.assertEqual(s.ocen(plansza), s.wagi_ocena[3]-s.wagi_ocena[2])
         self.assertAlmostEqual(s.ocen(plansza), 0.57)
 
     # czy dobrze ogarnia przypadki, jak w środku analizy drzewka nastąpi wygrana
@@ -54,7 +53,7 @@ class Test_silnik(unittest.TestCase):
         plansza.plansza[2][4] = Pole.zolty
         plansza.print()
 
-        ocz_wyn=[-100, -100, -100, -100, 2.0543000000000005, -100, -100]
+        ocz_wyn = [-100, -100, -100, -100, 2.0543000000000005, -100, -100]
         self.assertEqual(s.ocen_ruchy(plansza, Pole.zolty), ocz_wyn)
 
     # funkcja ocen_ruchy wrzucała wygrywający ruch do analizy, zamiast ocenić go na maksa
@@ -83,10 +82,9 @@ class Test_silnik(unittest.TestCase):
         plansza.plansza[2][3] = Pole.czerwony
         p.print()
 
-        ocz_wyn=[-100, -100, -100, 100, -100, -100, -100]
+        ocz_wyn = [-100, -100, -100, 100, -100, -100, -100]
         self.assertEqual(s.ocen_ruchy(plansza, Pole.zolty), ocz_wyn)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

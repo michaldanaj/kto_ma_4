@@ -123,8 +123,6 @@ class Silnik:
         czy_maks_gracz: bool,
         best_ocena_poprz: float,
     ) -> float:
-        # p.print()
-
         best_ocena = 0
 
         if akt_gleb > max_gleb:

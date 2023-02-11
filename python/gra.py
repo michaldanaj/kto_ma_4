@@ -7,41 +7,47 @@ import logging as log
 pl = Plansza()
 ruchy: list[int] = []
 
-class Czlowiek:
 
-    def pobierz_ruch(self, plansza:Plansza, kolor: Pole) -> str: 
-        #odczytuje ruch gracza
+class Czlowiek:
+    def pobierz_ruch(self, plansza: Plansza, kolor: Pole) -> str:
+        # odczytuje ruch gracza
         return input()
+
 
 class Komp:
     def __init__(self):
-       self.s = Silnik(6) 
+        self.s = Silnik(6)
 
-    def pobierz_ruch(self, plansza:Plansza, kolor: Pole) -> int:
+    def pobierz_ruch(self, plansza: Plansza, kolor: Pole) -> int:
         return self.s.najlepszy_ruch(plansza, kolor)
 
+
 def zamien_ruch(czyj_ruch: str):
-    if czyj_ruch=='czlowiek':
-        return 'komp'
+    if czyj_ruch == "czlowiek":
+        return "komp"
     else:
-        return 'czlowiek'
+        return "czlowiek"
 
 
-log.basicConfig(filename='log_gra.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
-    level=log.DEBUG, datefmt='%d-%b-%y %H:%M:%S')
+log.basicConfig(
+    filename="log_gra.log",
+    filemode="a",
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=log.DEBUG,
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 log.info("NOWA GRA")
-gracze = [ Czlowiek(), Komp()]   
+gracze = [Czlowiek(), Komp()]
 czyj_ruch_idx = 0
 kolor = Pole.czerwony
 while True:
-
     zawodnik = gracze[czyj_ruch_idx]
 
     pl.print()
 
-    j = zawodnik.pobierz_ruch(pl, kolor)    
+    j = zawodnik.pobierz_ruch(pl, kolor)
     if isinstance(j, str):
-        if j == 'e':
+        if j == "e":
             break
         j = int(j)
 
@@ -54,9 +60,9 @@ while True:
         break
 
     kolor = rev(kolor)
-    #czyj_ruch = zamien_ruch(czyj_ruch)
+    # czyj_ruch = zamien_ruch(czyj_ruch)
     czyj_ruch_idx = 1 - czyj_ruch_idx
-log.info('wpis do loga')
+log.info("wpis do loga")
 log.info(ruchy)
-log.info('\n')
+log.info("\n")
 log.info(pl)
