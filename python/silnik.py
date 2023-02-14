@@ -34,14 +34,17 @@ class Silnik:
         return punkty
 
     # Ocena z punktu widzenia żółtego
-    def ocen(self, pl: Plansza) -> float:
+    def ocen_gdy_nie_koniec(self, pl: Plansza) -> float:
         # czy ktoś wygrał?
-        wynik, ktory = self.pl.czy_koniec()
-        if wynik:
-            if ktory == Pole.zolty:
-                return 100
-            else:
-                return -100
+
+        ### Nie muszę tutaj sprawdzać zakończenia gry, bo ocena jest
+        # robiona gdy wiemy że końca nie ma
+        # wynik, ktory = self.pl.czy_koniec()
+        # if wynik:
+        #     if ktory == Pole.zolty:
+        #         return 100
+        #     else:
+        #         return -100
 
         # ocena ustawienia krążków
         ocena_z = (1 + self.zolty_mnoznik) * self.ocen_rozstaw(pl, Pole.zolty)
@@ -60,16 +63,15 @@ class Silnik:
         if akt_gleb > max_gleb:
             self.licznik = self.licznik + 1
             # plansza_print()
-            return self.ocen(self.pl)
+            return self.ocen_gdy_nie_koniec(self.pl)
 
         if czy_maks_gracz:
             best_ocena = -float("inf")
             for j in range(self.pl.n_col):
                 # wykonuję ruch
                 if self.pl.wrzuc(j, kolor):
-                    # sprawdzam, czy koniec
-                    # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    # wygrana = self.pl.czy_koniec()[0]
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -93,7 +95,7 @@ class Silnik:
             for j in range(self.pl.n_col):
                 if self.pl.wrzuc(j, kolor):
                     # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -128,8 +130,9 @@ class Silnik:
         if akt_gleb > max_gleb:
             # global licznik
             self.licznik = self.licznik + 1
-            # plansza_print()
-            return self.ocen(self.pl)
+            # mogę wywołać ocen_gdy_nie_koniec, bo gdyby był koniec,
+            # algorytm nie wszedłby na tą głębokość
+            return self.ocen_gdy_nie_koniec(self.pl)
 
         if czy_maks_gracz:
             best_ocena = -float("inf")
@@ -138,7 +141,7 @@ class Silnik:
                 if self.pl.wrzuc(j, kolor):
                     # sprawdzam, czy koniec
                     # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -174,7 +177,7 @@ class Silnik:
             for j in range(self.pl.n_col):
                 if self.pl.wrzuc(j, kolor):
                     # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -216,7 +219,7 @@ class Silnik:
             # global licznik
             self.licznik = self.licznik + 1
             # plansza_print()
-            return self.ocen(self.pl)
+            return self.ocen_gdy_nie_koniec(self.pl)
 
         if czy_maks_gracz:
             best_ocena = -float("inf")
@@ -224,8 +227,7 @@ class Silnik:
                 # wykonuję ruch
                 if self.pl.wrzuc(j, kolor):
                     # sprawdzam, czy koniec
-                    # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -239,6 +241,12 @@ class Silnik:
 
                     # jeśli nie, to zagłębiam się
                     if wyn is None:
+                        # Jeśli osiągnęliśmy maksymalną głębokość, to oceniam
+                        # pozycję i nie wchodzę dalej
+                        # if akt_gleb == max_gleb:
+                        #     self.licznik = self.licznik + 1
+                        #     return self.ocen(self.pl)
+
                         wyn = self.minimax_obc_v2(
                             akt_gleb + 1, max_gleb, rev(kolor), False, best_ocena
                         )
@@ -259,13 +267,12 @@ class Silnik:
                 # Jeśli nie da się wrzucić w dany wiersz
                 else:
                     pass
-
         if not czy_maks_gracz:
             best_ocena = float("inf")
             for j in range(self.pl.n_col):
                 if self.pl.wrzuc(j, kolor):
-                    # sprawdzam, czy koniec
-                    wygrana = self.pl.czy_koniec()[0]
+                    # sprawdzam, czy koniecne
+                    wygrana = self.pl.czy_wygrany_ruch(j)
 
                     # jeśli tak, to wychodzę bo znaleźliśmy najlepszy ruch
                     if wygrana:
@@ -319,7 +326,7 @@ class Silnik:
         for j in range(self.pl.n_col):
             if self.pl.wrzuc(j, kolor):
                 # sprawdzam, czy koniec
-                wygrana = self.pl.czy_koniec()[0]
+                wygrana = self.pl.czy_wygrany_ruch(j)
                 if wygrana:
                     oceny[j] = wygrana_punkty
                 else:
@@ -359,7 +366,7 @@ class Silnik:
         for j in kolejnosc_ocen:
             if self.pl.wrzuc(j, kolor):
                 # sprawdzam, czy koniec
-                wygrana = self.pl.czy_koniec()[0]
+                wygrana = self.pl.czy_wygrany_ruch(j)
                 if wygrana:
                     oceny[j] = wygrana_punkty
                 else:

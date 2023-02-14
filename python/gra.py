@@ -16,7 +16,7 @@ class Czlowiek:
 
 class Komp:
     def __init__(self):
-        self.s = Silnik(6)
+        self.s = Silnik(8)
 
     def pobierz_ruch(self, plansza: Plansza, kolor: Pole) -> int:
         return self.s.najlepszy_ruch(plansza, kolor)

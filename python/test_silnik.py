@@ -80,7 +80,7 @@ class Test_silnik(unittest.TestCase):
         plansza.plansza[2][1] = Pole.czerwony
         plansza.plansza[2][2] = Pole.czerwony
         plansza.plansza[2][3] = Pole.czerwony
-        p.print()
+        plansza.print()
 
         ocz_wyn = [-100, -100, -100, 100, -100, -100, -100]
         self.assertEqual(s.ocen_ruchy(plansza, Pole.zolty), ocz_wyn)
